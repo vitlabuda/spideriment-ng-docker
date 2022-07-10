@@ -1,0 +1,139 @@
+# ----- Spideriment-NG Docker example configuration file -----
+
+# Documentation comments are not present in this Docker-designated configuration file.
+# However, they can be found here:
+#  https://github.com/vitlabuda/spideriment-ng/blob/main/src/spideriment-ng.example.toml
+
+
+
+[generic]
+instance_name = "my_docker_instance"
+print_debug_log_messages = true
+force_garbage_collection = false
+start_urls = [
+    "https://en.wikipedia.org/wiki/Main_Page",
+    "https://en.wiktionary.org/wiki/Wiktionary:Main_Page",
+    "https://github.com/",
+    "https://www.google.com/",
+]
+
+
+
+[limits]
+worker_processes = 2
+worker_tasks_per_process = 8
+
+max_document_size = 1048576
+max_robots_txt_size = 65536
+request_timeout = 10
+max_redirects = 10
+max_crawling_delay = 600
+
+url_max_length = 512
+title_max_length = 192
+description_max_length = 1024
+keyword_max_length = 32
+author_max_length = 48
+content_snippet_max_length = 1536
+link_text_max_length = 96
+img_alt_text_max_length = 96
+img_title_max_length = 96
+
+max_keywords_per_document = 48
+max_content_snippets_per_document = 40
+max_content_snippets_per_type_per_document = 4
+max_links_per_document = 144
+max_images_per_document = 40
+
+
+
+[filtering]
+url_filters = []
+url_host_filters = [
+    ["block", "\\.(mil|gov)$"],
+    ["block", "gov\\.[a-z]+$"],
+    ["block", "archive\\.[a-z]+$"],
+    ["block", "m\\.(wikimedia|wikipedia|wiktionary|wikiquote|wikibooks|wikisource|wikinews|wikiversity|wikidata)\\.org$"],
+]
+url_path_filters = [
+    ["block", "\\.(jpg|jpeg|bmp|gif|png|tif|tiff|svg|heic|heif|ico|raw|xcf|psd|zps|cdr|mp3|wav|wma|flac|ogg|aac|m4a|mp4|avi|wmv|flv|webm|mkv|3gp|m4v|mov|zip|rar|7z|tar|gz|bz2|xz|z|tgz|tbz2|txz|tz|ggb|pdf|tex|doc|docx|docm|rtf|odt|xls|xlsx|xlsm|ods|ppt|pptx|pptm|odp|sql|csv|tsv|json|iso|img|vmdk|qcow|qcow2|scr|bin|elf|exe|vbs|vba|app|msi|msu|cab|dmg|rpm|deb|pkg|appimage|apk|bat|cmd|sh|bash|dll|so|ko|cur|ani|lnk|sys|drv|pak|tmp|bak|dmp)$"],
+]
+url_query_filters = []
+title_filters = [
+    ["block", "^$"],
+]
+description_filters = []
+keyword_filters = []
+language_filters = []
+author_filters = []
+content_snippet_filters = []
+link_text_filters = []
+
+img_url_filters = []
+img_url_host_filters = [
+    ["block", "\\.(mil|gov)$"],
+    ["block", "gov\\.[a-z]+$"],
+    ["block", "archive\\.[a-z]+$"],
+    ["block", "m\\.(wikimedia|wikipedia|wiktionary|wikiquote|wikibooks|wikisource|wikinews|wikiversity|wikidata)\\.org$"],
+]
+img_url_path_filters = [
+    ["allow", "\\.(jpg|jpeg|gif|png|webp|bmp|svg)$"],
+    ["block", ".*"],
+]
+img_url_query_filters = [
+    ["block", ".+"],
+]
+img_alt_text_filters = []
+img_title_filters = []
+
+
+remove_query_parameters_matching_regex = [
+    "^utm_.+$",
+    "^fbclid$"
+]
+
+allow_nonstandard_ports = false
+
+
+
+[fetcher]
+module_name = "internet"
+module_options.user_agent = "Mozilla/5.0 (X11; Linux x86_64) Spideriment-NG/{program_version} (web spider; respects robots.txt)"
+
+# DOCKER-NOTE: It is NOT RECOMMENDED to change this option, as you would then have to reconfigure other containers which depend on it.
+module_options.proxy = "socks5h://spideriment-ng-tor:9050"
+
+
+
+[database]
+# DOCKER-NOTE: It is NOT RECOMMENDED to change these options, as you would then have to reconfigure other containers which depend on them.
+module_name = "mysql"
+module_options.mysql_host = "mariadb"
+module_options.mysql_port = 3306
+module_options.mysql_user = "spideriment_docker_user"
+module_options.mysql_password = "spideriment_docker_password"
+module_options.mysql_db = "spideriment_docker_db"
+
+module_options.connection_pool_size = 8
+
+
+
+[document_parsers]
+    [document_parsers.100]
+    module_name = "html"
+
+
+
+[robot_caches]
+    [robot_caches.200]
+    module_name = "memory"
+    module_options.max_entries = 256
+
+
+    [robot_caches.100]
+    # DOCKER-NOTE: It is NOT RECOMMENDED to change these options, as you would then have to reconfigure other containers which depend on them.
+    module_name = "memcached"
+    module_options.memcached_host = "memcached"
+    module_options.memcached_port = 11211
+
+    module_options.connection_pool_size = 8

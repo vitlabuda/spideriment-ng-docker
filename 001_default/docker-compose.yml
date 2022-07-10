@@ -1,0 +1,69 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - spideriment-mariadb-volume:/var/lib/mysql:rw
+    networks:
+      - spideriment-network
+    environment:
+      - MARIADB_USER=spideriment_docker_user
+      - MARIADB_PASSWORD=spideriment_docker_password
+      - MARIADB_DATABASE=spideriment_docker_db
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
+
+  memcached:
+    image: memcached:latest
+    networks:
+      - spideriment-network
+
+  spideriment-ng:
+    build:
+      context: .
+      dockerfile: spideriment-ng.Dockerfile
+    volumes:
+      - ./configs/spideriment-ng.docker.toml:/spideriment-ng.docker.toml:ro
+    networks:
+      - spideriment-network
+    depends_on:
+      - mariadb
+      - memcached
+      - spideriment-ng-tor
+
+  spideriment-ng-tor:
+    build:
+      context: .
+      dockerfile: spideriment-ng-tor.Dockerfile
+    networks:
+      - spideriment-network
+
+  spideriment-ng-search:
+    build:
+      context: .
+      dockerfile: spideriment-ng-search.Dockerfile
+    volumes:
+      - ./configs/spideriment-ng-search.docker.toml:/spideriment-ng-search.docker.toml:ro
+    networks:
+      - spideriment-network
+    depends_on:
+      - mariadb
+
+  spideriment-ng-search-nginx:
+    build:
+      context: .
+      dockerfile: spideriment-ng-search-nginx.Dockerfile
+    ports:
+      - 8031:8031/tcp
+    networks:
+      - spideriment-network
+    depends_on:
+      - spideriment-ng-search
+
+
+
+volumes:
+  spideriment-mariadb-volume:
+
+
+
+networks:
+  spideriment-network:

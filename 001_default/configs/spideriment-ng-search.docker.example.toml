@@ -1,0 +1,53 @@
+# ----- Spideriment-NG Search Docker example configuration file -----
+
+# Documentation comments are not present in this Docker-designated configuration file.
+# However, they can be found here:
+#  https://github.com/vitlabuda/spideriment-ng-search/blob/main/src/spideriment-ng-search.example.toml
+
+
+
+[generic]
+instance_name = "Spideriment-NG Search (Docker)"
+
+
+
+[database]
+# DOCKER-NOTE: It is NOT RECOMMENDED to change these options, as you would then have to reconfigure other containers which depend on them.
+driver = "mysql"
+options.mysql_host = "mariadb"
+options.mysql_port = 3306
+options.mysql_user = "spideriment_docker_user"
+options.mysql_password = "spideriment_docker_password"
+options.mysql_db = "spideriment_docker_db"
+
+
+
+[scoring]
+min_total_score = 100.0
+
+title_score_multiplier = 150.0
+description_score_multiplier = 125.0
+heading_1_score_multiplier = 150.0
+heading_2_score_multiplier = 125.0
+heading_3_score_multiplier = 110.0
+heading_4_score_multiplier = 105.0
+heading_5_score_multiplier = 100.0
+emphasized_text_score_multiplier = 125.0
+regular_text_score_multiplier = 110.0
+list_item_text_score_multiplier = 100.0
+uncategorized_text_score_multiplier = 95.0
+fallback_text_score_multiplier = 85.0
+
+image_alt_text_score_multiplier = 90.0
+image_title_text_score_multiplier = 100.0
+
+
+
+[web_view]
+document_search_title_max_length = 80
+document_search_snippet_max_length = 480
+image_search_description_max_length = 40
+
+default_max_search_results = 30
+
+datetime_format_specification = "%Y-%m-%d %H:%M:%S"
