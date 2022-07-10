@@ -1,0 +1,10 @@
+{
+  "ignore": false,
+  "display_name": "Spideriment-NG Docker",
+  "description": null,
+  "programming_language": "Dockerfile",
+  "priority": 1200,
+  "category_id": "others",
+  "category_display_name": "Others",
+  "category_priority": 500
+}

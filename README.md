@@ -1,6 +1,7 @@
 # Spideriment-NG – Docker-related repository
 
-This repository contains files related to deploying [Spideriment-NG](https://github.com/vitlabuda/spideriment-ng) and
+This repository contains files and documentation related to deploying 
+[Spideriment-NG](https://github.com/vitlabuda/spideriment-ng) and 
 [Spideriment-NG Search](https://github.com/vitlabuda/spideriment-ng-search) using Docker.
 
 
