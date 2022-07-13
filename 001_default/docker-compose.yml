@@ -1,6 +1,7 @@
 services:
   mariadb:
     image: mariadb:latest
+    restart: always
     volumes:
       - spideriment-mariadb-volume:/var/lib/mysql:rw
     networks:
@@ -13,6 +14,7 @@ services:
 
   memcached:
     image: memcached:latest
+    restart: always
     networks:
       - spideriment-network
 
@@ -20,6 +22,7 @@ services:
     build:
       context: .
       dockerfile: spideriment-ng.Dockerfile
+    restart: always
     volumes:
       - ./configs/spideriment-ng.docker.toml:/spideriment-ng.docker.toml:ro
     networks:
@@ -33,6 +36,7 @@ services:
     build:
       context: .
       dockerfile: spideriment-ng-tor.Dockerfile
+    restart: always
     networks:
       - spideriment-network
 
@@ -40,6 +44,7 @@ services:
     build:
       context: .
       dockerfile: spideriment-ng-search.Dockerfile
+    restart: always
     volumes:
       - ./configs/spideriment-ng-search.docker.toml:/spideriment-ng-search.docker.toml:ro
     networks:
@@ -51,6 +56,7 @@ services:
     build:
       context: .
       dockerfile: spideriment-ng-search-nginx.Dockerfile
+    restart: always
     ports:
       - 8031:8031/tcp
     networks:
